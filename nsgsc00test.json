@@ -1,0 +1,765 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkSecurityGroups_nsgsc00test_name": {
+            "defaultValue": "nsgsc00test",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/av-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Conectividad de consolas de antivirus",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 220,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "80",
+                    "14",
+                    "443"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.50.32.232",
+                    "10.50.32.22",
+                    "10.50.8.48"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/bovedajump-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Conexion desde jump servers de boveda de contraseñas",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 160,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "3389",
+                    "22",
+                    "23"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.50.4.144",
+                    "10.50.4.145",
+                    "10.50.4.146",
+                    "10.184.64.32",
+                    "10.184.64.34",
+                    "10.184.64.35"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/bovedaportal-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Conexion desde los servidores de portal de Boveda de contraseñas",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 170,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "135",
+                    "445",
+                    "139",
+                    "22",
+                    "23",
+                    "49154"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.184.64.33",
+                    "10.50.4.143"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/connect-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 140,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "3389",
+                    "22"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.50.0.0/20",
+                    "10.15.0.0/20"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/DomainController-azure-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Domain Controller de Azure",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "sourceAddressPrefix": "172.29.105.5",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 250,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "88",
+                    "135",
+                    "139",
+                    "389",
+                    "445",
+                    "49152-65535",
+                    "123",
+                    "53",
+                    "464",
+                    "137",
+                    "138",
+                    "636",
+                    "3268"
+                ],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/DomainController-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Conectividad de los Domain Controller Onprem",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 240,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "88",
+                    "135",
+                    "139",
+                    "389",
+                    "445",
+                    "49152-65535",
+                    "123",
+                    "53",
+                    "464",
+                    "137",
+                    "138",
+                    "636",
+                    "3268"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.50.16.63",
+                    "10.50.16.64",
+                    "10.50.16.69",
+                    "10.50.16.70",
+                    "10.50.16.79",
+                    "10.50.16.80"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/icmp-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Flujo de icmp desde onprem",
+                "protocol": "ICMP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.0.0.0/8",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 120,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/LAN-Azure-Outbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "172.29.0.0/20",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/LAN-Onprem-Outbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Red interna Onprem TRIARA",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.0.0.0/8",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 110,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/monitoreo-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Servidores de monitoreo zabbix desde onprem",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 200,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "161",
+                    "10050"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.50.8.25",
+                    "10.50.4.83",
+                    "10.50.4.84",
+                    "10.50.4.168"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/ntp-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Servidores NTP Onprem",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "123",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 280,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.50.40.177",
+                    "10.50.40.178",
+                    "10.50.32.183",
+                    "10.50.40.98"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/satellite-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Satellite OnPrem",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 260,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "53",
+                    "67-69",
+                    "80",
+                    "443",
+                    "5000",
+                    "5646-5647",
+                    "5671",
+                    "8000",
+                    "8080",
+                    "8140",
+                    "9090"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.50.40.177",
+                    "10.52.32.32"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('networkSecurityGroups_nsgsc00test_name'), '/vpn-onprem-Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_nsgsc00test_name'))]"
+            ],
+            "properties": {
+                "description": "Conectividad onprem por VPN",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.15.0.0/21",
+                    "10.15.8.0/22",
+                    "10.15.12.0/23",
+                    "10.15.224.0/19"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2022-09-01",
+            "name": "[parameters('networkSecurityGroups_nsgsc00test_name')]",
+            "location": "southcentralus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'LAN-Onprem-Outbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'LAN-Azure-Outbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'vpn-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'icmp-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'connect-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'bovedajump-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'bovedaportal-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'monitoreo-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'av-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'DomainController-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'DomainController-azure-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'satellite-onprem-Inbound')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'ntp-onprem-Inbound')]"
+            ],
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "LAN-Onprem-Outbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'LAN-Onprem-Outbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Red interna Onprem TRIARA",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.0.0.0/8",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 110,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "LAN-Azure-Outbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'LAN-Azure-Outbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "172.29.0.0/20",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "vpn-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'vpn-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Conectividad onprem por VPN",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.15.0.0/21",
+                                "10.15.8.0/22",
+                                "10.15.12.0/23",
+                                "10.15.224.0/19"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "icmp-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'icmp-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Flujo de icmp desde onprem",
+                            "protocol": "ICMP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.0.0.0/8",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 120,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "connect-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'connect-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 140,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "3389",
+                                "22"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.50.0.0/20",
+                                "10.15.0.0/20"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "bovedajump-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'bovedajump-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Conexion desde jump servers de boveda de contraseñas",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 160,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "3389",
+                                "22",
+                                "23"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.50.4.144",
+                                "10.50.4.145",
+                                "10.50.4.146",
+                                "10.184.64.32",
+                                "10.184.64.34",
+                                "10.184.64.35"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "bovedaportal-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'bovedaportal-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Conexion desde los servidores de portal de Boveda de contraseñas",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 170,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "135",
+                                "445",
+                                "139",
+                                "22",
+                                "23",
+                                "49154"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.184.64.33",
+                                "10.50.4.143"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "monitoreo-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'monitoreo-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Servidores de monitoreo zabbix desde onprem",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 200,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "161",
+                                "10050"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.50.8.25",
+                                "10.50.4.83",
+                                "10.50.4.84",
+                                "10.50.4.168"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "av-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'av-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Conectividad de consolas de antivirus",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 220,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "80",
+                                "14",
+                                "443"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.50.32.232",
+                                "10.50.32.22",
+                                "10.50.8.48"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DomainController-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'DomainController-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Conectividad de los Domain Controller Onprem",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 240,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "88",
+                                "135",
+                                "139",
+                                "389",
+                                "445",
+                                "49152-65535",
+                                "123",
+                                "53",
+                                "464",
+                                "137",
+                                "138",
+                                "636",
+                                "3268"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.50.16.63",
+                                "10.50.16.64",
+                                "10.50.16.69",
+                                "10.50.16.70",
+                                "10.50.16.79",
+                                "10.50.16.80"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DomainController-azure-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'DomainController-azure-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Domain Controller de Azure",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "172.29.105.5",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 250,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "88",
+                                "135",
+                                "139",
+                                "389",
+                                "445",
+                                "49152-65535",
+                                "123",
+                                "53",
+                                "464",
+                                "137",
+                                "138",
+                                "636",
+                                "3268"
+                            ],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "satellite-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'satellite-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Satellite OnPrem",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 260,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "53",
+                                "67-69",
+                                "80",
+                                "443",
+                                "5000",
+                                "5646-5647",
+                                "5671",
+                                "8000",
+                                "8080",
+                                "8140",
+                                "9090"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.50.40.177",
+                                "10.52.32.32"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "ntp-onprem-Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_nsgsc00test_name'), 'ntp-onprem-Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Servidores NTP Onprem",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "123",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 280,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.50.40.177",
+                                "10.50.40.178",
+                                "10.50.32.183",
+                                "10.50.40.98"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
